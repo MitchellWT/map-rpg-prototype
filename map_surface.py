@@ -9,7 +9,7 @@ class MapSurface(pygame.Surface):
         self.location_rect.center = (map_size[0] / 2, map_size[1] / 2)
         self.fill(map_color)
 
-        for location in world_graph.graph.key():
+        for location in world_graph.graph.keys():
             for connection in world_graph.graph[location]:
                 # Draw rects based on graph nodes, use:
                 # pygame.draw.rect(self, self.location_color, self.location_rect)
