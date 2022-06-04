@@ -9,8 +9,24 @@ class MapSurface(pygame.Surface):
         self.location_rect.center = (map_size[0] / 2, map_size[1] / 2)
         self.fill(map_color)
 
-        for location in world_graph.graph.keys():
-            for connection in world_graph.graph[location]:
-                # Draw rects based on graph nodes, use:
-                # pygame.draw.rect(self, self.location_color, self.location_rect)
-                pass
+        traveled = []
+        next_loc = []
+        cur = world_graph.init_location
+        pygame.draw.rect(self, self.location_color, self.location_rect)
+        # TODO: graph traversal needs to be refactored
+        # TODO: drawing is broken, add frontyard
+        while len(traveled) != len(world_graph.init_location):
+            if cur not in world_graph.graph:
+                traveled.append(cur)
+                cur = next_loc.pop()[0]
+                continue
+            for location in world_graph.graph[cur]:
+                pygame.draw.rect(self, self.location_color, self.location_rect.move(location[1].to_coord()))
+            traveled.append(cur)
+            next_loc.extend(world_graph.graph[cur])
+            old = cur
+            cur = next_loc.pop()[0]
+            for location in world_graph.graph[old]:
+                if location[0] == cur:
+                    self.location_rect.move_ip(location[1].to_coord())
+                    break
