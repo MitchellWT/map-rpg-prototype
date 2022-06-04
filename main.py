@@ -13,6 +13,7 @@ location_list = [
 
 connector_list = [
     ("Home", "Backyard", Direction.DOWN),
+    # ("Home", "Frontyard", Direction.UP),
     ("Backyard", "Home", Direction.UP),
     ("Backyard", "River", Direction.LEFT)
 ]
