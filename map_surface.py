@@ -8,25 +8,26 @@ class MapSurface(pygame.Surface):
         self.location_rect = pygame.Rect(0, 0, map_size[0] / 4, map_size[1] / 4)
         self.location_rect.center = (map_size[0] / 2, map_size[1] / 2)
         self.fill(map_color)
+        self.render(world_graph)
 
-        traveled = []
-        next_loc = []
-        cur = world_graph.init_location
+    def render(self, world_graph):
+        frontier = [(world_graph.init_location, None)]
+        explored = {world_graph.init_location: self.location_rect.center}
+        font = pygame.font.Font(None, 32)
         pygame.draw.rect(self, self.location_color, self.location_rect)
-        # TODO: graph traversal needs to be refactored
-        # TODO: drawing is broken, add frontyard
-        while len(traveled) != len(world_graph.init_location):
-            if cur not in world_graph.graph:
-                traveled.append(cur)
-                cur = next_loc.pop()[0]
+        text = font.render(world_graph.init_location, True, (0, 0, 0))
+        self.blit(text, self.location_rect.center)
+        while len(frontier) != 0:
+            cur = frontier.pop(0)
+            if cur[0] not in world_graph.graph:
                 continue
-            for location in world_graph.graph[cur]:
-                pygame.draw.rect(self, self.location_color, self.location_rect.move(location[1].to_coord()))
-            traveled.append(cur)
-            next_loc.extend(world_graph.graph[cur])
-            old = cur
-            cur = next_loc.pop()[0]
-            for location in world_graph.graph[old]:
-                if location[0] == cur:
-                    self.location_rect.move_ip(location[1].to_coord())
-                    break
+            for location in world_graph.graph[cur[0]]:
+                if location[0] in explored.keys():
+                    continue
+                frontier.append(location)
+                self.location_rect.center = explored[cur[0]]
+                self.location_rect.move_ip(location[1].to_coord())
+                pygame.draw.rect(self, self.location_color, self.location_rect)
+                text = font.render(location[0], True, (0, 0, 0))
+                self.blit(text, self.location_rect.center)
+                explored[location[0]] = self.location_rect.center
