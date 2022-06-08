@@ -13,9 +13,10 @@ location_list = [
 
 connector_list = [
     ("Home", "Backyard", Direction.DOWN),
-    # ("Home", "Frontyard", Direction.UP),
+    ("Home", "Frontyard", Direction.UP),
     ("Backyard", "Home", Direction.UP),
-    ("Backyard", "River", Direction.LEFT)
+    ("Backyard", "River", Direction.LEFT),
+    ("Backyard", "BBQ", Direction.RIGHT)
 ]
 
 world_graph = WorldGraph(location_list, "Home", connector_list)
