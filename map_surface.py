@@ -14,9 +14,7 @@ class MapSurface(pygame.Surface):
         frontier = [(world_graph.init_location, None)]
         explored = {world_graph.init_location: self.location_rect.center}
         font = pygame.font.Font(None, 32)
-        pygame.draw.rect(self, self.location_color, self.location_rect)
-        text = font.render(world_graph.init_location, True, (0, 0, 0))
-        self.blit(text, self.location_rect.center)
+        self.draw_tile(font, world_graph.init_location)
         while len(frontier) != 0:
             cur = frontier.pop(0)
             if cur[0] not in world_graph.graph:
@@ -26,8 +24,16 @@ class MapSurface(pygame.Surface):
                     continue
                 frontier.append(location)
                 self.location_rect.center = explored[cur[0]]
-                self.location_rect.move_ip(location[1].to_coord())
-                pygame.draw.rect(self, self.location_color, self.location_rect)
-                text = font.render(location[0], True, (0, 0, 0))
-                self.blit(text, self.location_rect.center)
+                self.location_rect.move_ip(location[1].to_coord(75))
+                self.draw_tile(font, location[0])
                 explored[location[0]] = self.location_rect.center
+
+    def draw_tile(self, font, location_text):
+        pygame.draw.rect(self, self.location_color, self.location_rect)
+        text = font.render(location_text, True, (0, 0, 0))
+        text_rect = text.get_rect()
+        # Centers text on tile
+        self.blit(text, (
+            self.location_rect.center[0] - (text_rect.width / 2),
+            self.location_rect.center[1] - (text_rect.height / 2)
+        ))
