@@ -16,15 +16,17 @@ connector_list = [
     ("Home", "Frontyard", Direction.UP),
     ("Backyard", "Home", Direction.UP),
     ("Backyard", "River", Direction.LEFT),
-    ("Backyard", "BBQ", Direction.RIGHT)
+    ("Backyard", "BBQ", Direction.RIGHT),
+    ("River", "Tree", Direction.LEFT)
 ]
 
 world_graph = WorldGraph(location_list, "Home", connector_list)
 
 pygame.init()
-screen = pygame.display.set_mode((500, 500))
+screen_size = (1000, 720)  # Need to make tile spacing in map dependent on screen_size
+screen = pygame.display.set_mode(screen_size)
 
-map_size = (300, 300)
+map_size = (screen_size[0] / 4, screen_size[0] / 4)
 map_color = (50, 50, 50)
 location_color = (100, 255, 100)
 
@@ -36,7 +38,8 @@ while gaming:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gaming = False
-    screen.blit(map_surface, (100, 100, 100, 100))
+    # screen.blit(map_surface, ((screen_size[0] / 2) - map_size[0] / 2, (screen_size[1] / 2) - map_size[1] / 2))
+    screen.blit(map_surface, (0, screen_size[1] - map_size[1]))
     pygame.display.flip()
 
 pygame.quit()
