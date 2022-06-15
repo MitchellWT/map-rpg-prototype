@@ -18,10 +18,14 @@ class Screen:
             self.screen.blit(self.small_map_surface, self.surface_map[self.small_map_surface])
         else:
             self.screen.blit(self.big_map_surface, self.surface_map[self.big_map_surface])
+            return
+        for key, val in self.surface_map.items():
+            if key is self.small_map_surface or key is self.big_map_surface:
+                continue
+            self.screen.blit(key, val)
 
-    def add_static(self, surface, blit_coord):
+    def add(self, surface, blit_coord):
         self.surface_map[surface] = blit_coord
-        self.screen.blit(surface, blit_coord)
 
     def check_point_collide(self, surface, coord):
         return surface.get_rect().move(self.surface_map[surface]).collidepoint(coord)
