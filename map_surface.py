@@ -5,10 +5,11 @@ class MapSurface(pygame.Surface):
     def __init__(self, map_size, map_color, location_color, world_graph, size_factor):
         super().__init__(map_size)
         self.location_color = location_color
-        self.location_rect = pygame.Rect(0, 0, size_factor * 0.80, size_factor * 0.80)
+        self.location_rect = pygame.Rect(0, 0, size_factor * 0.8, size_factor * 0.8)
         self.location_rect.center = (map_size[0] / 2, map_size[1] / 2)
         self.fill(map_color)
         self.render(world_graph, size_factor)
+        # make world_graph and size_factor class attributes
 
     def render(self, world_graph, size_factor):
         frontier = [(world_graph.init_location, None)]
