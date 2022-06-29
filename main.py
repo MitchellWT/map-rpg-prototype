@@ -1,6 +1,8 @@
 import pygame
 
 from location import Location
+from player import Player
+from player_surface import PlayerSurface
 from screen import Screen
 from world_graph import WorldGraph
 from direction import Direction
@@ -21,20 +23,36 @@ connector_list = [
     ("River", "Tree", Direction.LEFT)
 ]
 
+player = Player(
+    "Epic Man",
+    200,
+    100,
+    150,
+    50,
+    2,
+    10,
+    10
+)
+
 world_graph = WorldGraph(location_list, "Home", connector_list)
 
 pygame.init()
-screen_size = (1000, 720)  # Need to make tile spacing in map dependent on screen_size
+screen_size = (1000, 720)
 
 small_map_size = (screen_size[0] / 4, screen_size[0] / 4)
 big_map_size = (screen_size[0], screen_size[1])
+player_display_size = (screen_size[0] / 4, screen_size[0] / 2.3)
 map_color = (50, 50, 50)
+player_display_color = (100, 100, 100)
+stat_color = (200, 200, 255)
 location_color = (100, 255, 100)
 
 small_map_surface = MapSurface(small_map_size, map_color, location_color, world_graph, 75)
 big_map_surface = MapSurface(big_map_size, map_color, location_color, world_graph, 75)
+player_surface = PlayerSurface(player_display_size, player_display_color, stat_color, player, 75)
 
 screen = Screen(screen_size, small_map_surface, (0, screen_size[1] - small_map_size[1]), big_map_surface)
+screen.add(player_surface, (0, 0))
 gaming = True
 
 while gaming:
@@ -49,5 +67,4 @@ while gaming:
                 screen.toggle_map()
     screen.render()
     pygame.display.flip()
-
 pygame.quit()
